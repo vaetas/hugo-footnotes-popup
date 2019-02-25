@@ -4,6 +4,7 @@ html {
   margin: 0 auto;
   font-size: 18px;
 }
+
 p {
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
@@ -33,10 +34,14 @@ p {
   padding: 1.25rem 0 0 1.25rem;
 }
 
-.popup-cl {
+#popup-close {
   padding: 1.25rem;
   margin-left: auto;
   cursor: pointer;
+}
+
+#popup-close:hover {
+  background-color: #fdfdfd;
 }
 
 #popup-content {
