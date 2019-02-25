@@ -1,38 +1,46 @@
-let wrapper     = document.getElementById("popup-wrapper"); 
-let index       = document.getElementById("popup-index"); 
-let content     = document.getElementById("popup-content"); 
-let closeButton = document.getElementById("popup-close"); 
+const popupWrapper = document.querySelector("#popup-wrapper");
+const popupIndex = document.querySelector("#popup-index");
+const popupContent = document.querySelector("#popup-content");
+const popupCloseButton = document.querySelector("#popup-close");
 
 function getFootnoteContent(index) {
-    let fnCount = document.getElementById("fn:1").parentNode.children.length;
-    let fnList = []; 
-    for (let x=1; x <= fnCount; x++) {
-        let footnote = document.getElementById(`fn:${x}`);
-        fnList.push(footnote);
-    };
-
-    return fnList[index-1].innerHTML.trim();
+    const id = "fn:" + index;
+    const fn = document.getElementById(id);
+    return fn.innerHTML.trim();
 };
 
 function footnotePopup() {
-    let fnReturn = document.getElementsByClassName("footnote-return"); 
-    while (fnReturn.length > 0) {
-        fnReturn[0].parentNode.removeChild(fnReturn[0]);
-    };
+    const fnReturns = document.querySelectorAll("a.footnote-return");
+    const fnRefs = document.querySelectorAll("sup.footnote-ref");
 
-    let refList = document.querySelectorAll("sup");
-    for (let x = 0; x < refList.length; x++) {
-        refList[x].addEventListener("click", function(event) {
-            event.preventDefault();    
-            index.innerHTML = refList[x].id.substring(6,7) + ".";            
-            content.innerHTML = getFootnoteContent(refList[x].id.substring(6,7));
-            wrapper.style.display = "flex";
-        });
-    };
-
-    closeButton.addEventListener("click", function(event) {
-        wrapper.style.display = "none";
+    fnReturns.forEach(function(fnReturn) {
+        const parent = fnReturn.parentNode;
+        parent.removeChild(fnReturn);
     });
+
+    fnRefs.forEach(function(fnRef) {
+        fnRef.addEventListener("click", handler("refs", fnRef));
+    });
+
+    window.addEventListener("scroll", handler("close"));
+    popupCloseButton.addEventListener("click", handler("close"));
+
+    function handler(type, node) {
+        return function(event) {
+            if (type === "close") {
+                popupWrapper.style.display = "none";
+            }
+
+            if (type === "refs") {
+                event.preventDefault();
+
+                const index = node.id.substring(6, 7);
+                popupIndex.innerHTML = index + ".";
+                popupContent.innerHTML = getFootnoteContent(index);
+                popupWrapper.style.display = "flex";
+            }
+        };
+    };
 };
 
 footnotePopup();
