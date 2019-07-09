@@ -60,7 +60,7 @@ function footnotePopup(showIndex, showCloseBtn) {
             if (type === "refs") {
                 event.preventDefault();
 
-                const index = node.id.substring(6, 7);
+                const index = node.id.substring(6);
 
                 if (showIndex) {
                     popupIndex.innerHTML = index + ".";
